@@ -11,8 +11,6 @@ import PhotosUI
 import StoreKit
 import SwiftUI
 
-// END OF CHANGES
-
 struct ContentView: View {
     @State private var processedImage: Image?
     @State private var filterIntensity = 0.5
@@ -44,14 +42,19 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                HStack{
-                    Text("Intensity")
-                    Slider(value: $filterIntensity)
-                        .onChange(of: filterIntensity, applyProcessing)
+                if let processedImage {
+                    HStack{
+                        Text("Intensity")
+                        Slider(value: $filterIntensity)
+                            .onChange(of: filterIntensity, applyProcessing)
+                    }
                 }
                 
                 HStack {
-                    Button("Change filter", action: changeFilter)
+                    
+                    if let processedImage {
+                        Button("Change filter", action: changeFilter)
+                    }
                     
                     Spacer()
                     
@@ -70,6 +73,9 @@ struct ContentView: View {
                 Button("Sepia Tone") { setFilter(CIFilter.sepiaTone() )}
                 Button("Unsharp Mask") { setFilter(CIFilter.unsharpMask() )}
                 Button("Vignette") { setFilter(CIFilter.vignette() )}
+                Button("Bloom") { setFilter(CIFilter.bloom() )}
+                Button("Kaleidoscope") { setFilter(CIFilter.kaleidoscope() )}
+                Button("Noir Effect") { setFilter(CIFilter.photoEffectNoir() )}
                 Button("Cancel", role: .cancel) { }
             }
         }
@@ -112,7 +118,7 @@ struct ContentView: View {
         
         filterCount += 1
         
-        if filterCount >= 3 {
+        if filterCount >= 20 {
             requestReview()
         }
     }
